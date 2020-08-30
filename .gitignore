@@ -122,3 +122,9 @@ dmypy.json
 
 # Pyre type checker
 .pyre/
+
+### VisualStudioCode Patch ###
+# Ignore all local history of files
+.history
+
+.vscode/
