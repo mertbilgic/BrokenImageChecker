@@ -5,5 +5,20 @@
 {%endblock%}
 
 {%block content%}
-    <h2>Broken Image Checker Sample</h2>
+    <div class="container">
+        <div class="logo row">
+            <div class="col-12 d-flex justify-content-center">
+                <img src="static/img/logo.png">
+            </div>
+        </div>
+
+        <div class="row justify-content-center">
+            <div class="input-group mb-3">
+                <input type="text" class="form-control" placeholder="ex:https://www.python.org/" aria-label="link" aria-describedby="button-addon2">
+                <div class="input-group-append">
+                  <button class="btn btn-outline-secondary" type="button" id="button-addon2">Crawl</button>
+                </div>
+              </div>
+        </div>
+    </div>
 {%endblock%}

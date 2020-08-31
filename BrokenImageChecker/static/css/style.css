@@ -1,0 +1,13 @@
+.logo img {
+    height: auto;
+    width: 75%;
+    margin-top: 50px;
+    margin-bottom: 50px;
+}
+#statuscode{
+    max-width: 75px;
+    max-width: 75px;
+}
+.input-group {
+    width: 88%; 
+}
