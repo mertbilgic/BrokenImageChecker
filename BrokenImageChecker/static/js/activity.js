@@ -1,6 +1,6 @@
 $(document).ready(function(){
     $("button").click(function(){
-        $.ajax({url: "/linkcheck", success: function(result){
+        $.ajax({type: "POST",url: "/taskrun", success: function(result){
         console.log(result);
         }});
         $("#progress").show();
