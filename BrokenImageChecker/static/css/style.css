@@ -11,3 +11,12 @@
 .input-group {
     width: 88%; 
 }
+.progressbar{
+    background:white;
+    border-radius: 4px;
+    box-shadow: 0 0 10px black;
+    margin: 0 auto;
+    width: 75%;
+    margin-top: 15px;
+    display: none;
+}
