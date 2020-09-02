@@ -1,7 +1,11 @@
-from flask import Flask,render_template,url_for,jsonify,Blueprint
+from flask import Flask,render_template,url_for,jsonify,Blueprint,request
 from settings import app
 from celery import Celery
 import time,random
+from crawler.img_spider import BrokenImageChecker
+from billiard import Pool
+import uuid
+
 
 task_blueprint = Blueprint('task', __name__, template_folder='templates')
 
@@ -9,15 +13,15 @@ celery = Celery('tasks', backend='redis://localhost', broker='amqp://localhost')
 celery.conf.update(app.config)
 
 @celery.task(bind=True,name='crawl_task')
-def crawl_task(self):
-    total = random.randint(10, 50)
-    for i in range(total):
-        time.sleep(1)
+def crawl_task(self,url):
+    guid = str(uuid.uuid4())
+    BrokenImageChecker.work(url)
     return 'Task completed!'
 
 @task_blueprint.route('/taskrun', methods=['POST'])
 def taskrun():
-    task = crawl_task.apply_async()
+    url = request.form.get("url",'')
+    task = crawl_task.apply_async(args=[url])
     return jsonify({}), 202, {'Location': url_for('task.taskstatus',
                                                   task_id=task.id)}
 @task_blueprint.route('/status/<task_id>')

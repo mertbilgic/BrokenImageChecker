@@ -1,6 +1,13 @@
 $(document).ready(function(){
     $("button").click(function(){
-        $.ajax({type: "POST",url: "/taskrun", success: function(result){
+        
+        var url =$('input[name="url"]').val();
+        $.ajax({
+            type: "POST",        
+            data: {
+                url: url,
+            },
+            url: "/taskrun", success: function(result){
         console.log(result);
         }});
         $("#progress").show();
