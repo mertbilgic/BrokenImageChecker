@@ -21,9 +21,14 @@
             </div>
         </div>
         <div class="progressbar" id="progress"></div>
+        <div id="result">
+            <div class="row justify-content-center"></div>
+            <div class="row justify-content-center"></div>
+        </div>
     </div>
 {%endblock%}
 
 {%block script %}
     <script src="{{ url_for('static', filename='node_modules/nanobar/nanobar.js')}}"></script>
+    <script src="{{ url_for('static', filename='node_modules/socket.io-client/dist/socket.io.js')}}"></script>
 {%endblock%}

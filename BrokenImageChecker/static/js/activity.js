@@ -28,4 +28,21 @@ async function demo() {
     $("#progress").hide();
     progressbar.go(0);
 }
-  
+
+function update_progress() {
+    console.log("Update");
+    var element = $('#result');
+    $(element[0].childNodes[1]).text('%100');
+    $(element[0].childNodes[1]).next().text("Update_progress Demo");
+}
+
+var namespace = '/events';
+var socket = io.connect('http://' + document.domain + ':' + location.port + namespace);
+
+socket.on('connect', function() {
+   console.log("Connection Start");
+});
+
+socket.on('crawlerstatus', function(msg) {
+    update_progress();
+});
