@@ -1,15 +1,13 @@
-import scrapy
-from scrapy import Request,Spider
-from scrapy.crawler import CrawlerProcess,install_reactor
 from urllib.parse import urlparse
 from datetime import datetime
-from helpers.mongo_helper import crawl_links
+
+from scrapy import Request,Spider
 from scrapyscript import Job, Processor
 
+from helpers.mongo_helper import crawl_links
 
-class BrokenImageChecker(scrapy.Spider):
+class BrokenImageChecker(Spider):
     name = 'BrokenImageChecker'
-    guid="asdasd"
 
     def start_requests(self):
         yield Request(self.url)
@@ -27,16 +25,15 @@ class BrokenImageChecker(scrapy.Spider):
     def write_db(self,src):
         for s in src:
             link={
-                "group_id":self.guid,
+                "group_id":self.g_id,
                 "src": s,
                 "date":(datetime.now()).strftime("%Y-%m-%dT%H:%M:%S.000Z"),
             }
             crawl_links.insert_one(link)    
         
     @staticmethod
-    def work(url):
-        broker_job = Job(BrokenImageChecker, url=url)
-
+    def work(url,g_id):
+        broker_job = Job(BrokenImageChecker, url=url,g_id=g_id)
         processor = Processor(settings=None)
         processor.run([broker_job]) 
         

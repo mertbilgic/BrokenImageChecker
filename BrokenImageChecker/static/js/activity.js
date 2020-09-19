@@ -1,3 +1,7 @@
+let namespace = '/events';
+let socket = io.connect('http://' + document.domain + ':' + location.port + namespace);
+var room;
+
 $(document).ready(function(){
     $("button").click(function(){
         
@@ -6,6 +10,7 @@ $(document).ready(function(){
             type: "POST",        
             data: {
                 url: url,
+                room: room,
             },
             url: "/taskrun", success: function(result){
         console.log(result);
@@ -36,13 +41,17 @@ function update_progress() {
     $(element[0].childNodes[1]).next().text("Update_progress Demo");
 }
 
-var namespace = '/events';
-var socket = io.connect('http://' + document.domain + ':' + location.port + namespace);
 
 socket.on('connect', function() {
    console.log("Connection Start");
 });
 
 socket.on('crawlerstatus', function(msg) {
-    update_progress();
+    console.log(JSON.parse(msg.response));
+});
+
+socket.on('room', function(msg) {
+    room = msg.room;
+    //socket.emit('join', {room:room});
+    console.log("Join Room",room);
 });
