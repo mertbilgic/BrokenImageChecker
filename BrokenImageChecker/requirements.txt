@@ -6,3 +6,4 @@ pymongo==3.11.0
 scrapyscript==1.1.0
 Flask-SocketIO==4.3.1
 requests==2.24.0
+random-user-agent==1.0.1
