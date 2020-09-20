@@ -47,7 +47,7 @@ socket.on('connect', function() {
 });
 
 socket.on('crawlerstatus', function(msg) {
-    console.log(JSON.parse(msg.response));
+    console.log(JSON.stringify(msg.result));
 });
 
 socket.on('room', function(msg) {

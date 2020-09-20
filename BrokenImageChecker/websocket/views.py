@@ -1,9 +1,7 @@
 import uuid
-import json
 
-from flask import Flask,jsonify,Blueprint,request
+from flask import Flask,jsonify,Blueprint,request,Response
 from flask_socketio import SocketIO,emit,disconnect
-from bson import json_util
 
 from settings import app,socketio
 from helpers.mongo_helper import broken_img,crawl_links
@@ -17,10 +15,10 @@ def clients():
 @websocket_blueprint.route('/event', methods=['POST'])
 def event():
     room = request.json['room']
-    g_id = request.json['g_id']
-    response = json.dumps(list(crawl_links.find({"group_id" : g_id})),default=json_util.default)
-    socketio.emit('crawlerstatus',{'response':response},namespace='/events',room=room)
-    return 'ok'
+    result = request.json['result']
+    socketio.emit('crawlerstatus',{'result':result},namespace='/events',room=room)
+    response = Response("",status=204)
+    return response
 
 @socketio.on('connect', namespace='/events')
 def events_connect():

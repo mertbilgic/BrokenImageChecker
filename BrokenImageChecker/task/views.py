@@ -6,6 +6,7 @@ from celery import Celery
 
 from settings import app
 from crawler.img_spider import BrokenImageChecker
+from helpers.request_helper import execute_to_ping
 
 task_blueprint = Blueprint('task', __name__, template_folder='templates')
 
@@ -15,9 +16,10 @@ celery.conf.update(app.config)
 @celery.task(bind=True,name='crawl_task')
 def crawl_task(self,url,room,event_url):
     g_id = str(uuid.uuid4())
-    BrokenImageChecker.work(url,g_id)
-    meta = {'g_id': g_id, 'room': room}
-    print(f"url:{url}")
+    crawl_urls = BrokenImageChecker.work(url,g_id)
+    result = execute_to_ping(g_id,crawl_urls)
+    result = f"'{result}'"
+    meta = {'g_id': g_id, 'room': room, 'result':result}
     post(event_url, json=meta)
     return 'Task completed!'
 
