@@ -7,6 +7,7 @@ from bson import json_util
 
 from settings import app,socketio
 from helpers.mongo_helper import broken_img,crawl_links
+from helpers.response_helper import create_response
 
 websocket_blueprint = Blueprint('websocket', __name__, template_folder='templates')
 
@@ -19,7 +20,8 @@ def event():
     room = request.json['room']
     g_id = request.json['g_id']
     result = json.dumps(list(broken_img.find({"group_id" : g_id})),default=json_util.default)
-    socketio.emit('crawlerstatus',result,namespace='/events',room=room)
+    response = create_response(result)
+    socketio.emit('crawlerstatus',response,namespace='/events',room=room)
     response = Response("",status=204)
     return response
 

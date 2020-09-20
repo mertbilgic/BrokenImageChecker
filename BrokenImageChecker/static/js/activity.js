@@ -45,7 +45,7 @@ socket.on('connect', function() {
 });
 
 socket.on('crawlerstatus', function(msg) {
-    msg = JSON.parse(msg);
+    msg.Result = JSON.parse(msg.Result);
     writeResponse(msg);
 });
 
