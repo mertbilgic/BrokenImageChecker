@@ -9,13 +9,11 @@ from helpers.mongo_helper import crawl_links,broken_img
 
 def get_link_response_code(link_to_check):
     headers = {'User-Agent': RandomUserAgent.get_random()}
-    resp = requests.head(link_to_check,headers=headers)
-    if resp.status_code == 405:
-        resp = requests.get(link_to_check,headers=headers)
+    resp = requests.get(link_to_check,headers=headers)
     return resp
 
 def update_response(response_data,url,response):
-    if(str(response.status_code) != "200"):
+    if(str(response.status_code) == "404"):
         response_data.append({
         "group_id":url["group_id"],
         "link":url["src"],
@@ -38,4 +36,3 @@ def execute_to_ping(g_id,crawl_urls):
                 update_response(response_data,url,resp)
     if response_data:
         broken_img.insert_many(response_data)
-    return response_data

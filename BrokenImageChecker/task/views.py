@@ -1,7 +1,9 @@
 import uuid
+import json
 from requests import post
 
 from flask import url_for,jsonify,Blueprint,request
+from bson import json_util
 from celery import Celery
 
 from settings import app
@@ -17,9 +19,8 @@ celery.conf.update(app.config)
 def crawl_task(self,url,room,event_url):
     g_id = str(uuid.uuid4())
     crawl_urls = BrokenImageChecker.work(url,g_id)
-    result = execute_to_ping(g_id,crawl_urls)
-    result = f"'{result}'"
-    meta = {'g_id': g_id, 'room': room, 'result':result}
+    execute_to_ping(g_id,crawl_urls)
+    meta = {'g_id': g_id, 'room': room}
     post(event_url, json=meta)
     return 'Task completed!'
 

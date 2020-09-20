@@ -13,7 +13,6 @@ $(document).ready(function(){
                 room: room,
             },
             url: "/taskrun", success: function(result){
-        console.log(result);
         }});
         $("#progress").show();
         demo();
@@ -41,13 +40,13 @@ function update_progress() {
     $(element[0].childNodes[1]).next().text("Update_progress Demo");
 }
 
-
 socket.on('connect', function() {
    console.log("Connection Start");
 });
 
 socket.on('crawlerstatus', function(msg) {
-    console.log(JSON.stringify(msg.result));
+    msg = JSON.parse(msg);
+    writeResponse(msg);
 });
 
 socket.on('room', function(msg) {
@@ -55,3 +54,22 @@ socket.on('room', function(msg) {
     //socket.emit('join', {room:room});
     console.log("Join Room",room);
 });
+
+var tagsToReplace = {
+    '&': '&amp;',
+    '<': '&lt;',
+    '>': '&gt;',
+};
+function replaceTag(tag) {
+    return tagsToReplace[tag] || tag;
+}
+
+function safe_tags_replace(str) {
+    return str.replace(/[&<>]/g, replaceTag);
+}
+function writeResponse(response){
+    $(".result")
+    .removeClass("d-none")
+    .addClass("d-block")
+    document.getElementById("response").innerHTML = safe_tags_replace(JSON.stringify(response, undefined, 2));
+}
